@@ -1,0 +1,52 @@
+{
+  "name": "jester",
+  "version": "0.0.1",
+  "description": "Jest Electron Reporter",
+  "main": "index.js",
+  "author": "charlieharutaka",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/electron": "^1.6.10",
+    "@types/jest": "^24.0.18",
+    "@types/lodash": "^4.14.138",
+    "@types/node": "^12.7.4",
+    "@types/react": "^16.9.2",
+    "@types/react-dom": "^16.9.0",
+    "@typescript-eslint/eslint-plugin": "^2.1.0",
+    "@typescript-eslint/parser": "^2.1.0",
+    "copy-pkg-json-webpack-plugin": "0.0.38",
+    "css-loader": "^3.2.0",
+    "eslint": "^6.3.0",
+    "eslint-config-prettier": "^6.2.0",
+    "eslint-plugin-react": "^7.14.3",
+    "html-webpack-plugin": "^3.2.0",
+    "jest": "^24.9.0",
+    "prettier": "^1.18.2",
+    "style-loader": "^1.0.0",
+    "ts-jest": "^24.0.2",
+    "ts-loader": "^6.0.4",
+    "typescript": "^3.6.2",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.8"
+  },
+  "dependencies": {
+    "@jest/reporters": "^24.9.0",
+    "@types/node-ipc": "^9.1.1",
+    "@types/react-redux": "^7.1.2",
+    "async": "^3.1.0",
+    "electron": "^6.0.7",
+    "lodash": "^4.17.15",
+    "node-ipc": "^9.1.1",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-redux": "^7.1.1",
+    "redux": "^4.0.4",
+    "uws": "^10.148.1"
+  },
+  "scripts": {
+    "build": "webpack",
+    "build:watch": "webpack --watch",
+    "start": "electron ./dist/main.bundle.js",
+    "test": "jest"
+  }
+}

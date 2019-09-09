@@ -1,0 +1,26 @@
+{
+	"name": "jester",
+	"version": "0.0.1",
+	"description": "Jest Electron Reporter",
+	"main": "./main.bundle.js",
+	"author": "charlieharutaka",
+	"license": "MIT",
+	"dependencies": {
+		"@jest/reporters": "^24.9.0",
+		"@types/node-ipc": "^9.1.1",
+		"@types/react-redux": "^7.1.2",
+		"async": "^3.1.0",
+		"electron": "^6.0.7",
+		"lodash": "^4.17.15",
+		"node-ipc": "^9.1.1",
+		"react": "^16.9.0",
+		"react-dom": "^16.9.0",
+		"react-redux": "^7.1.1",
+		"redux": "^4.0.4",
+		"uws": "^10.148.1"
+	},
+	"scripts": {
+		"start": "electron ./main.bundle.js"
+	},
+	"postinstall": "electron-builder install-app-deps"
+}
