@@ -1,14 +1,26 @@
 /**
  * Entry point of the Election app.
  */
-import { app, BrowserWindow } from 'electron'
+import { Menu, app, BrowserWindow, ipcMain } from 'electron'
 import * as path from 'path'
 import * as url from 'url'
+import { exec } from 'child_process'
 
 import { createServer } from './Server'
 
 let mainWindow: Electron.BrowserWindow | null
 let server: ReturnType<typeof createServer> | null
+
+ipcMain.on('exec', (event, args) => {
+  console.log('exec npm test')
+  exec('npm test', { cwd: path.resolve('./') }, (error, stdout, stderr) => {
+    if (error) {
+      console.error(error)
+    }
+    console.log('stdout: ' + stdout)
+    console.error('stderr: ' + stderr)
+  })
+})
 
 function createWindow(): void {
   // Create the browser window.
@@ -43,6 +55,8 @@ function createWindow(): void {
     mainWindow = null
     server = null
   })
+
+  // mainWindow.removeMenu()
 }
 
 // This method will be called when Electron has finished

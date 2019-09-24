@@ -1773,7 +1773,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var node_ipc_1 = __importDefault(__webpack_require__(/*! node-ipc */ "./node_modules/node-ipc/node-ipc.js"));
 var Macros_1 = __webpack_require__(/*! ../common/Macros */ "./src/common/Macros.ts");
-var ResultTypes_1 = __webpack_require__(/*! ../redux/types/ResultTypes */ "./src/redux/types/ResultTypes.ts");
 function createServer(win) {
     node_ipc_1.default.config.id = Macros_1.SOCKET_ID;
     node_ipc_1.default.config.networkPort = Macros_1.SOCKET_PORT;
@@ -1784,10 +1783,7 @@ function createServer(win) {
         });
         node_ipc_1.default.server.on('message', function (data, socket) {
             console.log('dispatch setResult');
-            win.webContents.send('redux', {
-                type: ResultTypes_1.SET_RESULT,
-                payload: data,
-            });
+            win.webContents.send('redux', data);
         });
     });
     return node_ipc_1.default.server;
@@ -1820,9 +1816,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var electron_1 = __webpack_require__(/*! electron */ "electron");
 var path = __importStar(__webpack_require__(/*! path */ "path"));
 var url = __importStar(__webpack_require__(/*! url */ "url"));
+var child_process_1 = __webpack_require__(/*! child_process */ "child_process");
 var Server_1 = __webpack_require__(/*! ./Server */ "./src/main/Server.ts");
 var mainWindow;
 var server;
+electron_1.ipcMain.on('exec', function (event, args) {
+    console.log('exec npm test');
+    child_process_1.exec('npm test', { cwd: path.resolve('./') }, function (error, stdout, stderr) {
+        if (error) {
+            console.error(error);
+        }
+        console.log('stdout: ' + stdout);
+        console.error('stderr: ' + stderr);
+    });
+});
 function createWindow() {
     // Create the browser window.
     mainWindow = new electron_1.BrowserWindow({
@@ -1852,6 +1859,7 @@ function createWindow() {
         mainWindow = null;
         server = null;
     });
+    // mainWindow.removeMenu()
 }
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -1878,20 +1886,14 @@ electron_1.app.on('activate', function () {
 
 /***/ }),
 
-/***/ "./src/redux/types/ResultTypes.ts":
-/*!****************************************!*\
-  !*** ./src/redux/types/ResultTypes.ts ***!
-  \****************************************/
+/***/ "child_process":
+/*!********************************!*\
+  !*** external "child_process" ***!
+  \********************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SET_RESULT = 'SET_RESULT';
-exports.UPDATE_RESULT = 'UPDATE_RESULT';
-exports.CLEAR_RESULT = 'CLEAR_RESULT';
-
+module.exports = require("child_process");
 
 /***/ }),
 

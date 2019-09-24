@@ -24,6 +24,7 @@ module.exports = {
     'linebreak-style': ['error', 'windows'],
     quotes: ['error', 'single'],
     semi: ['error', 'never'],
+    'react/prop-types': [0],
     '@typescript-eslint/member-delimiter-style': [
       'error',
       {
@@ -33,5 +34,6 @@ module.exports = {
         },
       },
     ],
+    '@typescript-eslint/explicit-function-return-type': 'off',
   },
 }

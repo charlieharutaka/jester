@@ -3,6 +3,7 @@ const _ = require('lodash')
 const path = require('path')
 const CopyPkgJsonPlugin = require('copy-pkg-json-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 
 const isEnvDevelopment = process.env.NODE_ENV === 'development'
 const isEnvProduction = process.env.NODE_ENV === 'production'
@@ -28,21 +29,54 @@ const config = {
       {
         test: /\.(ts|tsx)$/,
         exclude: /node_modules/,
-        loader: 'ts-loader',
+        use: [
+          {
+            loader: 'cache-loader',
+          },
+          {
+            loader: 'thread-loader',
+            options: {
+              workers: require('os').cpus().length - 1,
+            },
+          },
+          {
+            loader: 'ts-loader',
+            options: {
+              happyPackMode: true,
+            },
+          },
+        ],
+      },
+      {
+        test: /\.svg$/,
+        loader: 'react-svg-loader',
       },
       {
         test: /\.(scss|css)$/,
         use: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.(jpg|png|svg|ico|icns)$/,
+        test: /\.(jpg|png|ico|icns)$/,
         loader: 'file-loader',
         options: {
           name: '[path][name].[ext]',
         },
       },
+      {
+        test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'fonts/',
+            },
+          },
+        ],
+      },
     ],
   },
+  plugins: [new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true })],
 }
 
 const mainConfig = _.merge(_.cloneDeep(config), {

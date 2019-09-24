@@ -1,38 +1,32 @@
 import React from 'react'
-import { connect, MapDispatchToProps } from 'react-redux'
-import { setResult, updateResult, clearResult } from '../../redux/actions/ResultActions'
-import { AggregatedResult, TestResult } from '@jest/test-result'
-import { Dispatch } from 'redux'
-import { Test } from '@jest/reporters/build/types'
-import { ReduxState } from '../../redux/reducers/RootReducer'
 
-const Dashboard: React.FunctionComponent = (props) => {
-  React.useEffect(() => console.log(props), [props])
-  return <div>DASHBOARD</div>
+import { makeStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
+import Overview from './overview/Overview'
+import Modal from '../modal/Modal'
+
+const useStyles = makeStyles({
+  view: {
+    margin: '30px',
+  },
+  jesterTitle: {
+    fontFamily: 'Abril Fatface',
+    fontSize: '48pt',
+    fontStyle: 'italic',
+  },
+})
+
+const Dashboard: React.FunctionComponent<{}> = () => {
+  const classes = useStyles()
+  return (
+    <div className="app">
+      <div className={classes.view}>
+        <Typography className={classes.jesterTitle}>Jester</Typography>
+        <Overview />
+      </div>
+      <Modal />
+    </div>
+  )
 }
 
-const mapStateToProps = (state: ReduxState) => {
-  const { result } = state
-  return {
-    ...result,
-  }
-}
-
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {
-    setResult: (aggregatedResult: AggregatedResult) => {
-      dispatch(setResult(aggregatedResult))
-    },
-    updateResult: (test: Test, result: TestResult) => {
-      dispatch(updateResult(test, result))
-    },
-    clearResult: () => {
-      dispatch(clearResult())
-    },
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Dashboard)
+export default Dashboard

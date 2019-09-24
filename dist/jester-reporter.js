@@ -1759,6 +1759,104 @@ exports.SOCKET_ID = 'JESTER_APP';
 
 /***/ }),
 
+/***/ "./src/renderer/redux/actions/ResultActions.ts":
+/*!*****************************************************!*\
+  !*** ./src/renderer/redux/actions/ResultActions.ts ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ResultTypes_1 = __webpack_require__(/*! ../types/ResultTypes */ "./src/renderer/redux/types/ResultTypes.ts");
+function setResult(project, aggregatedResult) {
+    return {
+        type: ResultTypes_1.SET_RESULT,
+        payload: {
+            project: project,
+            aggregatedResult: aggregatedResult,
+        },
+    };
+}
+exports.setResult = setResult;
+function updateResult(project, test, result) {
+    return {
+        type: ResultTypes_1.UPDATE_RESULT,
+        payload: {
+            project: project,
+            test: test,
+            result: result,
+        },
+    };
+}
+exports.updateResult = updateResult;
+function clearResult(project) {
+    return {
+        type: ResultTypes_1.CLEAR_RESULT,
+        payload: {
+            project: project,
+        },
+    };
+}
+exports.clearResult = clearResult;
+
+
+/***/ }),
+
+/***/ "./src/renderer/redux/types/ResultTypes.ts":
+/*!*************************************************!*\
+  !*** ./src/renderer/redux/types/ResultTypes.ts ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SET_RESULT = 'SET_RESULT';
+exports.UPDATE_RESULT = 'UPDATE_RESULT';
+exports.CLEAR_RESULT = 'CLEAR_RESULT';
+
+
+/***/ }),
+
+/***/ "./src/reporter/Dispatch.ts":
+/*!**********************************!*\
+  !*** ./src/reporter/Dispatch.ts ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var node_ipc_1 = __importDefault(__webpack_require__(/*! node-ipc */ "./node_modules/node-ipc/node-ipc.js"));
+var Macros_1 = __webpack_require__(/*! ../common/Macros */ "./src/common/Macros.ts");
+node_ipc_1.default.config.id = Macros_1.SOCKET_ID;
+node_ipc_1.default.config.networkPort = Macros_1.SOCKET_PORT;
+node_ipc_1.default.config.maxRetries = 0;
+node_ipc_1.default.config.silent = true;
+exports.default = (function (action) {
+    node_ipc_1.default.connectToNet(Macros_1.SOCKET_ID, function () {
+        console.log('Attempting to connect to Jester Frontend...');
+        node_ipc_1.default.of[Macros_1.SOCKET_ID].on('connect', function () {
+            console.log('connected');
+            node_ipc_1.default.of[Macros_1.SOCKET_ID].emit('message', action);
+            node_ipc_1.default.disconnect(Macros_1.SOCKET_ID);
+        });
+        node_ipc_1.default.of[Macros_1.SOCKET_ID].on('error', function () {
+            console.error('Could not connect! Are you running the Jester Frontend?');
+        });
+    });
+});
+
+
+/***/ }),
+
 /***/ "./src/reporter/JesterReporter.ts":
 /*!****************************************!*\
   !*** ./src/reporter/JesterReporter.ts ***!
@@ -1772,33 +1870,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var node_ipc_1 = __importDefault(__webpack_require__(/*! node-ipc */ "./node_modules/node-ipc/node-ipc.js"));
-var Macros_1 = __webpack_require__(/*! ../common/Macros */ "./src/common/Macros.ts");
+var ResultActions_1 = __webpack_require__(/*! ../renderer/redux/actions/ResultActions */ "./src/renderer/redux/actions/ResultActions.ts");
+var Dispatch_1 = __importDefault(__webpack_require__(/*! ./Dispatch */ "./src/reporter/Dispatch.ts"));
 var JesterReporter = /** @class */ (function () {
     function JesterReporter(globalConfig, options) {
         this.globalConfig = globalConfig;
         this.options = options;
-        node_ipc_1.default.config.id = Macros_1.SOCKET_ID;
-        node_ipc_1.default.config.networkPort = Macros_1.SOCKET_PORT;
-        node_ipc_1.default.config.maxRetries = 0;
-        node_ipc_1.default.config.silent = true;
     }
-    JesterReporter.prototype.onTestResult = function (test, testResult, aggregatedResult) { };
-    JesterReporter.prototype.onRunStart = function (results, options) { };
-    JesterReporter.prototype.onTestStart = function (test) { };
+    JesterReporter.prototype.onTestResult = function (test, testResult, aggregatedResult) {
+        console.log("Test " + test.path + " completed, " + (testResult.numFailingTests === 0 ? 'passed' : 'failed'));
+    };
+    JesterReporter.prototype.onRunStart = function (results, options) {
+        console.log('Run Started');
+    };
+    JesterReporter.prototype.onTestStart = function (test) {
+        console.log("Test " + test.path + " started");
+    };
     JesterReporter.prototype.onRunComplete = function (contexts, results) {
         console.log('Run Complete');
-        node_ipc_1.default.connectToNet(Macros_1.SOCKET_ID, function () {
-            console.log('Attempting to connect to Jester Frontend...');
-            node_ipc_1.default.of[Macros_1.SOCKET_ID].on('connect', function () {
-                console.log('Connected');
-                node_ipc_1.default.of[Macros_1.SOCKET_ID].emit('message', results);
-                node_ipc_1.default.disconnect(Macros_1.SOCKET_ID);
-            });
-            node_ipc_1.default.of[Macros_1.SOCKET_ID].on('error', function () {
-                console.error('Could not connect! Are you running the Jester Frontend?');
-            });
-        });
+        Dispatch_1.default(ResultActions_1.setResult(this.globalConfig.rootDir, results));
     };
     JesterReporter.prototype.getLastError = function () { };
     return JesterReporter;
