@@ -9,6 +9,7 @@ const isEnvDevelopment = process.env.NODE_ENV === 'development'
 const isEnvProduction = process.env.NODE_ENV === 'production'
 
 const config = {
+  cache: true,
   devtool: isEnvDevelopment ? 'source-map' : false,
   mode: isEnvProduction ? 'production' : 'development',
   output: { path: path.join(__dirname, 'dist') },
@@ -31,9 +32,6 @@ const config = {
         exclude: /node_modules/,
         use: [
           {
-            loader: 'cache-loader',
-          },
-          {
             loader: 'thread-loader',
             options: {
               workers: require('os').cpus().length - 1,
@@ -49,7 +47,7 @@ const config = {
       },
       {
         test: /\.svg$/,
-        loader: 'react-svg-loader',
+        loader: '@svgr/webpack',
       },
       {
         test: /\.(scss|css)$/,
@@ -64,19 +62,14 @@ const config = {
       },
       {
         test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: 'fonts/',
-            },
-          },
-        ],
+        type: 'asset/resource',
+        generator: {
+          filename: 'fonts/[name].[ext]',
+        },
       },
     ],
   },
-  plugins: [new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true })],
+  plugins: [new ForkTsCheckerWebpackPlugin()],
 }
 
 const mainConfig = _.merge(_.cloneDeep(config), {
@@ -115,7 +108,7 @@ const reporterConfig = _.merge(_.cloneDeep(config), {
   target: 'node',
   output: {
     filename: 'jester-reporter.js',
-    library: '',
+    library: 'reporter',
     libraryTarget: 'commonjs-module',
   },
 })

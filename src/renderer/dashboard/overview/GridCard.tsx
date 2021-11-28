@@ -1,12 +1,14 @@
 import _ from 'lodash'
 import React from 'react'
 
-import { makeStyles } from '@material-ui/core/styles'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import Paper from '@material-ui/core/Paper'
-import Tooltip from '@material-ui/core/Tooltip'
+import { makeStyles } from '@mui/styles'
+import Grid from '@mui/material/Grid'
+import Typography from '@mui/material/Typography'
+import Paper from '@mui/material/Paper'
+import Tooltip from '@mui/material/Tooltip'
 import { randomPatternStyle } from './Pattern'
+
+import type { RendererTheme } from '../../renderer'
 
 interface GridCardProps {
   newProjectCard?: boolean
@@ -15,7 +17,7 @@ interface GridCardProps {
   onClick?: (event?: React.SyntheticEvent) => void
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: RendererTheme) => ({
   card: {
     width: '240px',
     height: '336px',
@@ -29,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'hidden',
   },
   cardInfo: {
-    height: `calc(96px - ${2 * theme.spacing(2)}px)`,
+    height: `calc(96px - ${2 * Number(theme.spacing(2))}px)`,
     padding: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column-reverse',
@@ -81,7 +83,7 @@ const GridCard: React.FunctionComponent<GridCardProps> = ({ newProjectCard, proj
             </div>
           ) : (
             <div className={classes.innerDiv}>
-              <Tooltip title={projectDir} enterDelay={300}>
+              <Tooltip title={projectDir ?? ''} enterDelay={300}>
                 <Typography className={classes.dir}>{projectDir}</Typography>
               </Tooltip>
               <Typography className={classes.name}>{projectName}</Typography>

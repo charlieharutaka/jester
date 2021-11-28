@@ -1,10 +1,12 @@
 /**
  * Entry point of the Election app.
  */
-import { Menu, app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 import * as path from 'path'
 import * as url from 'url'
 import { exec } from 'child_process'
+
+require('@electron/remote/main').initialize()
 
 import { createServer } from './Server'
 
@@ -25,15 +27,17 @@ ipcMain.on('exec', (event, args) => {
 function createWindow(): void {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    height: 600,
-    width: 800,
+    height: 800,
+    width: 1200,
     webPreferences: {
       nodeIntegration: true,
       webSecurity: false,
       devTools: process.env.NODE_ENV === 'production' ? false : true,
+      contextIsolation: false,
     },
   })
 
+  require('@electron/remote/main').enable(mainWindow.webContents)
   server = createServer(mainWindow)
   server.start()
 

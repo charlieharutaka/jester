@@ -3,15 +3,14 @@ import { Dispatch } from 'redux'
 import { newProject } from '../../redux/actions/ProjectActions'
 import { connect } from 'react-redux'
 import { closeModal } from '../../redux/actions/ModalActions'
-import { remote } from 'electron'
-const { dialog } = remote
+import { dialog } from '@electron/remote'
 
-import Button from '@material-ui/core/Button'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import TextField from '@material-ui/core/TextField'
-import FolderIcon from '@material-ui/icons/Folder'
+import Button from '@mui/material/Button'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogTitle from '@mui/material/DialogTitle'
+import TextField from '@mui/material/TextField'
+import FolderIcon from '@mui/icons-material/Folder'
 
 function mapDispatchToProps(dispatch: Dispatch) {
   return {
@@ -35,12 +34,11 @@ const NewProject: React.FunctionComponent<NewProjectProps> = ({ newProject, clos
     if (directoryError) setDirectoryError(undefined)
     if (nameError) setNameError(undefined)
   }
-  const handleChange = (setter: React.Dispatch<React.SetStateAction<string>>) => (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    clearErrors()
-    setter(event.currentTarget.value)
-  }
+  const handleChange =
+    (setter: React.Dispatch<React.SetStateAction<string>>) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      clearErrors()
+      setter(event.currentTarget.value)
+    }
   const handleSubmit = () => {
     if (directory === '') {
       setDirectoryError('This field is required')
@@ -113,7 +111,4 @@ const NewProject: React.FunctionComponent<NewProjectProps> = ({ newProject, clos
   )
 }
 
-export default connect(
-  null,
-  mapDispatchToProps,
-)(NewProject)
+export default connect(null, mapDispatchToProps)(NewProject)

@@ -6,7 +6,7 @@ import { Modals } from '../redux/types/ModalTypes'
 import { closeModal, openModal } from '../redux/actions/ModalActions'
 import { connect } from 'react-redux'
 
-import Dialog from '@material-ui/core/Dialog'
+import Dialog from '@mui/material/Dialog'
 
 import NewProject from './variants/NewProject'
 

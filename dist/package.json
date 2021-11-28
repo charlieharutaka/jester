@@ -6,25 +6,25 @@
 	"author": "charlieharutaka",
 	"license": "MIT",
 	"dependencies": {
-		"@jest/reporters": "^24.9.0",
-		"@material-ui/core": "^4.4.2",
-		"@material-ui/icons": "^4.4.1",
-		"@types/node-ipc": "^9.1.1",
-		"@types/react-redux": "^7.1.2",
-		"async": "^3.1.0",
-		"electron": "^6.0.7",
-		"file-loader": "^4.2.0",
-		"fork-ts-checker-webpack-plugin": "^1.5.0",
-		"lodash": "^4.17.15",
-		"node-ipc": "^9.1.1",
-		"react": "^16.9.0",
-		"react-dom": "^16.9.0",
-		"react-redux": "^7.1.1",
-		"redux": "^4.0.4",
-		"uws": "^10.148.1"
+		"@electron/remote": "^2.0.1",
+		"@emotion/react": "^11.7.0",
+		"@emotion/styled": "^11.6.0",
+		"@fontsource/abril-fatface": "^4.5.0",
+		"@jest/reporters": "^27.3.1",
+		"@mui/icons-material": "^5.2.0",
+		"@mui/material": "^5.2.1",
+		"@mui/styles": "^5.2.1",
+		"electron": "^16.0.1",
+		"lodash": "^4.17.21",
+		"node-ipc": "^10.1.0",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2",
+		"react-redux": "^7.2.6",
+		"redux": "^4.1.2",
+		"uWebSockets.js": "github:uNetworking/uWebSockets.js#v17.0.0"
 	},
+	"postinstall": "electron-builder install-app-deps",
 	"scripts": {
 		"start": "electron ./main.bundle.js"
-	},
-	"postinstall": "electron-builder install-app-deps"
+	}
 }
