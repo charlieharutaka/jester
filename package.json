@@ -44,7 +44,7 @@
     "@mui/icons-material": "^5.2.0",
     "@mui/material": "^5.2.1",
     "@mui/styles": "^5.2.1",
-    "electron": "^16.0.1",
+    "electron": "^16.0.6",
     "lodash": "^4.17.21",
     "node-ipc": "^10.1.0",
     "react": "^17.0.2",
